@@ -598,45 +598,6 @@
         <a href="https://calendar.app.google/yTx72Gegu3pM8iTm8" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:12px;width:100%;justify-content:center;">Abrir calendario en pantalla completa</a>
       </div>
     </div>
-
-    <form class="contact-form" id="solicitar-cita" style="margin-top:44px;">
-      <h4 style="font-size:1.05rem;">¿Prefieres pedirlo por WhatsApp?</h4>
-      <div class="form-row">
-        <label for="bkService">Servicio</label>
-        <select id="bkService" required>
-          <option value="">Selecciona un servicio</option>
-          <option>Corte de cabello</option>
-          <option>Color</option>
-          <option>Mechas / Balayage</option>
-          <option>Peinado</option>
-          <option>Tratamiento capilar</option>
-          <option>Recogido (novia/eventos)</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label for="bkDate">Fecha preferida</label>
-        <input type="date" id="bkDate" required>
-      </div>
-      <div class="form-row">
-        <label for="bkTime">Hora preferida</label>
-        <input type="time" id="bkTime" required>
-      </div>
-      <div class="form-row">
-        <label for="bkName">Tu nombre</label>
-        <input type="text" id="bkName" placeholder="Nombre y apellidos" required>
-      </div>
-      <div class="form-row">
-        <label for="bkPhone">Tu teléfono</label>
-        <input type="tel" id="bkPhone" placeholder="600 000 000" required>
-      </div>
-      <input type="text" name="empresa_web" class="hp-field" tabindex="-1" autocomplete="off">
-      <div class="consent-row">
-        <input type="checkbox" id="bkConsent" required>
-        <label for="bkConsent">He leído y acepto la <a href="#" data-modal="privacy">Política de Privacidad</a> para el tratamiento de mis datos.</label>
-      </div>
-      <button type="button" class="btn btn-primary" id="bkSubmit" style="justify-content:center;">Enviar solicitud por WhatsApp</button>
-      <p style="font-size:.82rem;color:var(--ink-dim);">Se abrirá WhatsApp con tu solicitud ya redactada. La peluquería te confirmará la disponibilidad respondiendo al mensaje.</p>
-    </form>
   </div>
 </section>
 
@@ -864,30 +825,6 @@
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.hidden = true; });
   });
-
-  // ---- Reserva por WhatsApp (con honeypot anti-spam) ----
-  const bkSubmit = document.getElementById('bkSubmit');
-  if (bkSubmit) {
-    bkSubmit.addEventListener('click', () => {
-      const honeypot = document.querySelector('input[name="empresa_web"]');
-      if (honeypot && honeypot.value) return;
-      const service = document.getElementById('bkService').value;
-      const date = document.getElementById('bkDate').value;
-      const time = document.getElementById('bkTime').value;
-      const name = document.getElementById('bkName').value;
-      const phone = document.getElementById('bkPhone').value;
-      const consent = document.getElementById('bkConsent').checked;
-      if (!service || !date || !time || !name || !phone || !consent) {
-        alert('Por favor, rellena todos los campos y acepta la política de privacidad.');
-        return;
-      }
-      const dateObj = new Date(date + 'T' + time);
-      const dateFormatted = dateObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-      const dateCapitalized = dateFormatted.charAt(0).toUpperCase() + dateFormatted.slice(1);
-      const msg = `📅 NUEVA SOLICITUD DE CITA\n\nServicio: ${service}\nFecha: ${dateCapitalized}\nHora: ${time}\n\nNombre: ${name}\nTeléfono: ${phone}\n\n¿Confirmamos esta cita?`;
-      window.open('https://wa.me/34680278608?text=' + encodeURIComponent(msg), '_blank');
-    });
-  }
 
   // ---- Formulario de contacto (bloqueo anti-spam por honeypot) ----
   const contactForm = document.getElementById('contactForm');
