@@ -334,13 +334,6 @@
     padding:26px;color:var(--ink-dim);font-style:italic;font-size:.92rem;
   }
   @media (max-width:860px){.reviews-grid{grid-template-columns:1fr;}}
-  .review-form{
-    margin-top:50px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-    padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:18px;
-  }
-  .review-form h4{grid-column:1/-1;font-size:1.05rem;margin-bottom:4px;}
-  .review-form .full{grid-column:1/-1;}
-  @media (max-width:700px){.review-form{grid-template-columns:1fr;}}
 
   /* ---------- FORM ELEMENTS (shared) ---------- */
   .form-row{display:flex;flex-direction:column;gap:8px;}
@@ -613,42 +606,18 @@
     <h2 class="section-title reveal">Lo que dicen de nosotras</h2>
     <div class="reviews-top reveal">
       <div class="rating-badge">
-        <span class="stars">★★★★★</span>
-        <span class="num">[Tu nota Google] · [nº] reseñas</span>
+        <span class="stars" id="reviewsStars">★★★★★</span>
+        <span class="num" id="reviewsCount">[Se rellena solo en cuanto conectes tu Google Business]</span>
       </div>
-      <a href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID" target="_blank" rel="noopener" class="btn btn-outline">Ver reseñas en Google</a>
-      <a href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID" target="_blank" rel="noopener" class="btn btn-primary">Déjanos tu reseña en Google</a>
+      <a href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID" target="_blank" rel="noopener" class="btn btn-outline" id="reviewsSeeLink">Ver reseñas en Google</a>
+      <a href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID" target="_blank" rel="noopener" class="btn btn-primary" id="reviewsWriteLink">Déjanos tu reseña en Google</a>
     </div>
-    <div class="reviews-grid">
-      <div class="review-card reveal-scale">"[Aquí irá una reseña real de una clienta — pégamela y la pongo tal cual]"</div>
+    <div class="reviews-grid" id="reviewsGrid">
+      <div class="review-card reveal-scale">"[Aquí aparecerán vuestras reseñas reales de Google en cuanto conectemos la clave de API — mientras tanto, esto es solo un ejemplo]"</div>
       <div class="review-card reveal-scale">"[Reseña real 2]"</div>
       <div class="review-card reveal-scale">"[Reseña real 3]"</div>
     </div>
-
-    <form class="review-form reveal" id="reviewForm">
-      <h4>¿Ya has venido? Cuéntanos tu experiencia</h4>
-      <div class="form-row full">
-        <label for="rvName">Tu nombre</label>
-        <input type="text" id="rvName" required>
-      </div>
-      <div class="form-row full">
-        <label for="rvStars">Valoración</label>
-        <select id="rvStars" required>
-          <option value="5">★★★★★ Excelente</option>
-          <option value="4">★★★★ Muy bien</option>
-          <option value="3">★★★ Bien</option>
-          <option value="2">★★ Regular</option>
-          <option value="1">★ Mal</option>
-        </select>
-      </div>
-      <div class="form-row full">
-        <label for="rvText">Tu reseña</label>
-        <textarea id="rvText" rows="4" required></textarea>
-      </div>
-      <input type="text" name="empresa_web2" class="hp-field" tabindex="-1" autocomplete="off">
-      <button type="button" class="btn btn-primary full" id="rvSubmit" style="justify-content:center;">Enviar reseña</button>
-      <p class="full" style="font-size:.82rem;color:var(--ink-dim);">Tu reseña se envía directamente a la peluquería. Si quieres ayudarnos aún más, ¡compártela también en Google!</p>
-    </form>
+    <p style="margin-top:20px;font-size:.82rem;color:var(--ink-dim);">Las reseñas se traen automáticamente desde tu perfil de Google Business — en cuanto alguien deje una reseña nueva en Google, aparecerá aquí sola, sin que tengas que hacer nada.</p>
   </div>
 </section>
 
@@ -852,20 +821,47 @@
     });
   }
 
-  // ---- Reseña por WhatsApp (con honeypot anti-spam) ----
-  const rvSubmit = document.getElementById('rvSubmit');
-  if (rvSubmit) {
-    rvSubmit.addEventListener('click', () => {
-      const honeypot = document.querySelector('input[name="empresa_web2"]');
-      if (honeypot && honeypot.value) return;
-      const name = document.getElementById('rvName').value;
-      const stars = document.getElementById('rvStars').value;
-      const text = document.getElementById('rvText').value;
-      if (!name || !text) { alert('Por favor, completa tu nombre y tu reseña.'); return; }
-      const starsStr = '★'.repeat(Number(stars));
-      const msg = `Nueva reseña desde la web:\n${starsStr}\nNombre: ${name}\n"${text}"`;
-      window.open('https://wa.me/34680278608?text=' + encodeURIComponent(msg), '_blank');
-    });
+  // ---- Reseñas reales de Google (Places API, sin backend) ----
+  // 1) Sustituye estas dos constantes por tu clave de API y tu Place ID cuando los tengas.
+  const GOOGLE_MAPS_API_KEY = 'TU_GOOGLE_MAPS_API_KEY';
+  const GOOGLE_PLACE_ID = 'TU_PLACE_ID';
+
+  if (GOOGLE_MAPS_API_KEY !== 'TU_GOOGLE_MAPS_API_KEY' && GOOGLE_PLACE_ID !== 'TU_PLACE_ID') {
+    const seeLink = document.getElementById('reviewsSeeLink');
+    const writeLink = document.getElementById('reviewsWriteLink');
+    if (seeLink) seeLink.href = 'https://search.google.com/local/writereview?placeid=' + GOOGLE_PLACE_ID;
+    if (writeLink) writeLink.href = 'https://search.google.com/local/writereview?placeid=' + GOOGLE_PLACE_ID;
+
+    // Cargador oficial de Google Maps JS API (asíncrono, sin bloquear la carga de la página)
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({ key: GOOGLE_MAPS_API_KEY, v: "weekly" });
+
+    (async () => {
+      try {
+        const { Place } = await google.maps.importLibrary('places');
+        const place = new Place({ id: GOOGLE_PLACE_ID });
+        await place.fetchFields({ fields: ['reviews', 'rating', 'userRatingCount'] });
+
+        const starsEl = document.getElementById('reviewsStars');
+        const countEl = document.getElementById('reviewsCount');
+        if (starsEl && place.rating) starsEl.textContent = '★'.repeat(Math.round(place.rating)) + '☆'.repeat(5 - Math.round(place.rating));
+        if (countEl) countEl.textContent = (place.rating || '–') + ' · ' + (place.userRatingCount || 0) + ' reseñas en Google';
+
+        const grid = document.getElementById('reviewsGrid');
+        if (grid && place.reviews && place.reviews.length) {
+          grid.innerHTML = '';
+          place.reviews.slice(0, 6).forEach(review => {
+            const card = document.createElement('div');
+            card.className = 'review-card visible';
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            const authorName = review.authorAttribution ? review.authorAttribution.displayName : 'Clienta de Google';
+            card.innerHTML = `<strong style="display:block;color:var(--ink);font-style:normal;margin-bottom:6px;">${stars}</strong>"${review.text}"<br><span style="display:block;margin-top:10px;font-style:normal;font-size:.82rem;color:var(--ink-dim);">— ${authorName}, ${review.relativePublishTimeDescription || ''}</span>`;
+            grid.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.warn('No se pudieron cargar las reseñas de Google:', err);
+      }
+    })();
   }
 })();
 </script>
