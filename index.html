@@ -288,10 +288,12 @@
   .gallery-item{
     aspect-ratio:1/1;border-radius:var(--radius);border:1.5px dashed var(--border);
     background:linear-gradient(160deg, var(--card), var(--bg-alt));
-    display:flex;align-items:center;justify-content:center;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
     transition:transform .35s ease, border-color .35s;
   }
   .gallery-item:hover{transform:translateY(-6px);border-color:var(--accent);}
+  .gallery-item-img{border-style:solid;}
+  .gallery-item-img img{width:100%;height:100%;object-fit:cover;}
   @media (max-width:860px){.gallery-grid{grid-template-columns:1fr 1fr;}}
   @media (max-width:520px){.gallery-grid{grid-template-columns:1fr;}}
 
@@ -564,16 +566,16 @@
 
 <section class="gallery section-pad" id="trabajos">
   <div class="container">
-    <span class="section-tag reveal">Trabajos realizados</span>
-    <h2 class="section-title reveal">Nuestro trabajo habla por nosotras</h2>
-    <p class="section-desc reveal">Sustituye estos huecos por fotos reales de vuestros trabajos.</p>
+    <span class="section-tag reveal">Inspiración de looks</span>
+    <h2 class="section-title reveal">Estilos que podemos crear para ti</h2>
+    <p class="section-desc reveal">Fotos de ejemplo para inspirarte — sustitúyelas por fotos reales de vuestros trabajos en cuanto las tengáis, así las clientas ven vuestro trabajo real.</p>
     <div class="gallery-grid">
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
-      <div class="gallery-item reveal-scale"><div class="add-placeholder"><span class="ap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><small>Foto de trabajo</small></div></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de corte moderno (foto ilustrativa)" loading="lazy"></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de color y mechas (foto ilustrativa)" loading="lazy"></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de peinado (foto ilustrativa)" loading="lazy"></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1595475884562-073c30d45670?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de estilismo (foto ilustrativa)" loading="lazy"></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de balayage (foto ilustrativa)" loading="lazy"></div>
+      <div class="gallery-item gallery-item-img reveal-scale"><img src="https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=800&q=80" alt="Ejemplo de recogido (foto ilustrativa)" loading="lazy"></div>
     </div>
   </div>
 </section>
