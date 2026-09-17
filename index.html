@@ -890,7 +890,10 @@
         alert('Por favor, rellena todos los campos y acepta la política de privacidad.');
         return;
       }
-      const msg = `Hola, quiero pedir cita:\nServicio: ${service}\nFecha: ${date}\nHora: ${time}\nNombre: ${name}\nTeléfono: ${phone}`;
+      const dateObj = new Date(date + 'T' + time);
+      const dateFormatted = dateObj.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const dateCapitalized = dateFormatted.charAt(0).toUpperCase() + dateFormatted.slice(1);
+      const msg = `📅 NUEVA SOLICITUD DE CITA\n\nServicio: ${service}\nFecha: ${dateCapitalized}\nHora: ${time}\n\nNombre: ${name}\nTeléfono: ${phone}\n\n¿Confirmamos esta cita?`;
       window.open('https://wa.me/34680278608?text=' + encodeURIComponent(msg), '_blank');
     });
   }
